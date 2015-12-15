@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <style>
+  canvas{background:#000000;}
+  </style>
+  <meta charset="utf-8"/>
+  <script type="application/javascript">
+    var s = [1.5, 2, 3, 4, 5, 6];
+    var pos = [0, 0, 0, 0, 0, 0];
+        
+
+    function draw() {
+        var ctx = document.getElementById('canvas').getContext("2d");
+
+
+        ctx.clearRect(0, 0, 500, 500); //clear canvas
+
+        ctx.save();
+        ctx.translate(pos[0], 0);
+
+        ctx.fillStyle = "pink";
+        ctx.fillRect (30, 30, 55, 50);
+
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(pos[1], 0);
+
+        ctx.fillStyle ="green";
+        ctx.font = "48px serif";
+        ctx.fillText("Hello Its Me I am here I am Ryan", 10, 50);
+
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(pos[2], 0);
+
+        ctx.beginPath();
+        ctx.arc(95,150,30,0,2*Math.PI);
+        ctx.fillStyle = "blue";
+        ctx.fill();
+
+        ctx.restore();
+        
+        ctx.save();
+        ctx.translate(pos[3], 0);
+
+
+        ctx.beginPath();
+        ctx.fillStyle = "yellow";
+        ctx.arc(100,200,50,0,Math.PI/2,false);
+        ctx.fill();
+
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(pos[4], 0);
+
+
+         ctx.beginPath();
+         ctx.moveTo(100, 50);
+         ctx.lineTo(130, 100);
+         ctx.lineTo(70, 100);
+         ctx.fillStyle = "red";
+         ctx.fill();
+
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(pos[5], 0);
+
+
+         ctx.beginPath();
+         ctx.fillStyle = "orange";
+         ctx.arc(100,290,35,0,Math.PI/2,true);
+         ctx.fill();
+
+         ctx.restore();
+
+        pos[0] += s[0];
+        pos[1] += s[1];
+        pos[2] += s[2];
+        pos[3] += s[3];
+        pos[4] += s[4];
+        pos[5] += s[5];
+        pos[6] += s[6];
+
+
+        if(pos[0] > 500) {
+          pos[0] = 0;
+        }
+        if(pos[1] > 500) {
+          pos[1] = 0;
+        }
+        if(pos[2] > 500) {
+          pos[2] = 0;
+        }
+        if(pos[3] > 500) {
+          pos[3] = 0;
+        }
+        if(pos[4] > 500) {
+          pos[4] = 0;
+        }
+        if(pos[5] > 500) {
+          pos[5] = 0;
+        }
+        if(pos[6] > 500) {
+          pos[6] = 0;
+        }
+
+        window.requestAnimationFrame(draw);
+    }
+
+     var canvas;
+    var context;
+    var circles = [];
+    function Circle(x, y, color) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    }
+      function init() {
+    canvas.onclick = function(event) {
+      handleClick(event.clientX, event.clientY);
+    };
+      }
+    function handleClick(x, y) {
+       var found = false;
+     for (var i=0; i<circles.length; i++) {
+      d = Math.sqrt((circles[i].x - x)*(circles[i].x - x) + (circles[i].y - y)*(circles[i].y - y));
+      if (d <= 30) {
+        circles.splice(i, 1);
+        found = true;
+      }
+     }
+     fillBackgroundColor();
+     if (!found) {
+      var colors = ["red", "green", "blue", "orange", "purple", "yellow"];
+      var color = colors[Math.floor(Math.random()*colors.length)];
+      circles.push(new Circle(x, y, color));
+    }
+    for (var i=0; i<circles.length; i++) {
+      drawCircle(circles[i]);
+    }
+    }
+    function drawCircle(circle) {
+     context.beginPath();
+     context.arc(circle.x, circle.y, 30, 0, degreesToRadians(360), true);
+     context.fillStyle = circle.color;
+     context.fill();
+    }
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    fillBackgroundColor();
+    for (var i=0; i<circles.length; i++) {
+      drawCircle(circles[i]);
+     }
+      }
+    function fillBackgroundColor() {
+     //var colors = ["white", "yellow", "blue", "red"];
+     //var bgColor = colors[Math.floor(Math.random() * colors.length)];
+     context.fillStyle = 'black';
+     context.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  function degreesToRadians(degrees) {
+    //converts from degrees to radians and returns
+    return (degrees * Math.PI)/180;
+  }
+  window.onload = init;
+  </script>
+ </head>
+ <body onload="draw();">
+   <canvas id="canvas" width="500" height="350"></canvas>
+ </body>
+</html>
